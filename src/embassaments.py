@@ -1,5 +1,5 @@
-import requests
 from flask import Flask, jsonify
+import requests
 
 app = Flask(__name__)
 
@@ -110,4 +110,4 @@ def global_percentage_route():
     return jsonify({"global_percentage": global_percentage, "newest_date": newest_date})
 
 if __name__ == '__main__':
-    app.run(debug=False)
+    app.run(debug=True)
