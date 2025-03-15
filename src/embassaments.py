@@ -1,6 +1,5 @@
 from flask import Flask, jsonify
 import requests
-import os
 
 app = Flask(__name__)
 
@@ -10,16 +9,24 @@ BASE_URL = "http://aca-web.gencat.cat/sdim2/apirest"
 # Función para obtener la lista de sensores de embalses
 def get_embassament_sensors():
     url = f"{BASE_URL}/catalog?componentType=embassament"
-    response = requests.get(url, timeout=10)  # Timeout de 10 segundos
-    response.raise_for_status()  # Lanza una excepción si la petición no fue exitosa
-    return response.json()
+    try:
+        response = requests.get(url, timeout=20)  # Timeout de 20 segundos
+        response.raise_for_status()  # Lanza una excepción si la petición no fue exitosa
+        return response.json()
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching embassament sensors: {e}")
+        return {}
 
 # Función para obtener la última medida de un sensor específico
 def get_last_measure(provider, sensor):
     url = f"{BASE_URL}/data/{provider}/{sensor}"
-    response = requests.get(url, timeout=10)  # Timeout de 10 segundos
-    response.raise_for_status()  # Lanza una excepción si la petición no fue exitosa
-    return response.json()
+    try:
+        response = requests.get(url, timeout=20)  # Timeout de 20 segundos
+        response.raise_for_status()  # Lanza una excepción si la petición no fue exitosa
+        return response.json()
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching last measure for {provider}/{sensor}: {e}")
+        return {}
 
 # Función para procesar los datos de los sensores
 def process_sensors_data():
@@ -41,6 +48,9 @@ def process_sensors_data():
                 
                 # Obtener la última medida del sensor
                 measure_data = get_last_measure(provider, sensor_id)
+                if not measure_data:
+                    continue  # Saltar si no se pudo obtener la medida
+                
                 last_measure = float(measure_data["observations"][0]["value"])
                 timestamp = measure_data["observations"][0]["timestamp"]
 
@@ -82,6 +92,9 @@ def calculate_global_percentage_and_newest_date():
                 
                 # Obtener la última medida del sensor
                 measure_data = get_last_measure(provider, sensor_id)
+                if not measure_data:
+                    continue  # Saltar si no se pudo obtener la medida
+                
                 last_measure = float(measure_data["observations"][0]["value"])
                 timestamp = measure_data["observations"][0]["timestamp"]
                 
@@ -111,4 +124,6 @@ def global_percentage_route():
     return jsonify({"global_percentage": global_percentage, "newest_date": newest_date})
 
 if __name__ == '__main__':
+    print("Iniciando servidor...")
     app.run(debug=True)
+
