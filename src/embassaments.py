@@ -122,7 +122,7 @@ def embassaments():
 @app.route('/global_percentage', methods=['GET'])
 def global_percentage_route():
     global_percentage, newest_date = calculate_global_percentage_and_newest_date()
-    return jsonify({"global_percentage": global_percentage, "newest_date": newest_date})
+    return jsonify({"global_percentage": round(global_percentage, 2), "newest_date": newest_date})
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
