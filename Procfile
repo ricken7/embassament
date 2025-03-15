@@ -1,1 +1,1 @@
-web: gunicorn embassaments:app
+web: gunicorn src.embassaments:app
