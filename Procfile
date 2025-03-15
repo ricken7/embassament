@@ -1,1 +1,1 @@
-web: python src/embassaments.py
+web: gunicorn embassaments:app
