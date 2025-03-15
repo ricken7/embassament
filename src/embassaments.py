@@ -10,14 +10,14 @@ BASE_URL = "http://aca-web.gencat.cat/sdim2/apirest"
 # Función para obtener la lista de sensores de embalses
 def get_embassament_sensors():
     url = f"{BASE_URL}/catalog?componentType=embassament"
-    response = requests.get(url)
+    response = requests.get(url, timeout=10)  # Timeout de 10 segundos
     response.raise_for_status()  # Lanza una excepción si la petición no fue exitosa
     return response.json()
 
 # Función para obtener la última medida de un sensor específico
 def get_last_measure(provider, sensor):
     url = f"{BASE_URL}/data/{provider}/{sensor}"
-    response = requests.get(url)
+    response = requests.get(url, timeout=10)  # Timeout de 10 segundos
     response.raise_for_status()  # Lanza una excepción si la petición no fue exitosa
     return response.json()
 
@@ -111,5 +111,4 @@ def global_percentage_route():
     return jsonify({"global_percentage": global_percentage, "newest_date": newest_date})
 
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))
-    app.run(debug=True, host='0.0.0.0', port=port)
+    app.run(debug=True)
