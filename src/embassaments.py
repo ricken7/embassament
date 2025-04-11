@@ -5,13 +5,13 @@ import os
 app = Flask(__name__)
 
 # URL base de la API
-BASE_URL = "http://aca-web.gencat.cat/sdim2/apirest"
+BASE_URL = "https://aplicacions.aca.gencat.cat/sdim2/apirest"
 
 # Función para obtener la lista de sensores de embalses
 def get_embassament_sensors():
     url = f"{BASE_URL}/catalog?componentType=embassament"
     try:
-        response = requests.get(url, timeout=20)  # Timeout de 20 segundos
+        response = requests.get(url, timeout=20, verify=True)  # Timeout de 20 segundos
         response.raise_for_status()  # Lanza una excepción si la petición no fue exitosa
         return response.json()
     except requests.exceptions.RequestException as e:
@@ -22,7 +22,7 @@ def get_embassament_sensors():
 def get_last_measure(provider, sensor):
     url = f"{BASE_URL}/data/{provider}/{sensor}"
     try:
-        response = requests.get(url, timeout=20)  # Timeout de 20 segundos
+        response = requests.get(url, timeout=20, verify=True)  # Timeout de 20 segundos
         response.raise_for_status()  # Lanza una excepción si la petición no fue exitosa
         return response.json()
     except requests.exceptions.RequestException as e:
@@ -128,4 +128,3 @@ if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     print("Iniciando servidor...")
     app.run(debug=False, host='0.0.0.0', port=port)
-
