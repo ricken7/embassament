@@ -1,79 +1,118 @@
-# Flask Embassaments Project
+# Sentilo ACA Embassaments API
 
-Este proyecto es una aplicación web desarrollada con Flask que permite obtener datos sobre embalses y calcular el porcentaje global de volumen embalsado.
+Una aplicación Flask containerizada con Docker que proporciona datos sobre embalses de la ACA (Agència Catalana de l'Aigua) a través de la API de Sentilo.
 
-## Estructura del Proyecto
+## 🚀 Características
+
+- **API REST** para consultar datos de embalses
+- **Dockerizado** para fácil despliegue
+- **Datos en tiempo real** desde la API de Sentilo ACA
+- **Endpoints optimizados** para consultas específicas
+
+## 📁 Estructura del Proyecto
 
 ```
-flask-app
-├── src
-│   ├── embassaments.py  # Lógica principal de la aplicación Flask
-├── requirements.txt      # Dependencias necesarias
-├── Procfile              # Instrucciones para Heroku
-└── README.md             # Documentación del proyecto
+sentilo-aca/
+├── src/
+│   └── embassaments.py      # Aplicación Flask principal
+├── docs/                    # Documentación
+├── requirements.txt         # Dependencias Python
+├── Dockerfile              # Configuración Docker
+├── docker-compose.yml      # Orquestación de contenedores
+├── .dockerignore           # Archivos excluidos del build
+└── README.md               # Este archivo
 ```
 
-## Requisitos
+## 🛠️ Requisitos
 
-Asegúrate de tener Python y pip instalados en tu máquina. Este proyecto requiere las siguientes dependencias:
+- **Docker** y **Docker Compose** instalados
+- Acceso a internet para consultar la API de Sentilo
 
-- Flask
-- requests
+## 🚀 Inicio Rápido
 
-## Instalación
+### Usando Docker Compose (Recomendado)
 
-1. Clona el repositorio:
-
-   ```
-   git clone <URL_DEL_REPOSITORIO>
-   cd flask-app
-   ```
-
-2. Crea un entorno virtual (opcional pero recomendado):
-
-   ```
-   python -m venv venv
-   source venv/bin/activate  # En Windows usa `venv\Scripts\activate`
+1. **Clona el repositorio:**
+   ```bash
+   git clone https://github.com/ricken7/embassament.git
+   cd embassament
    ```
 
-3. Instala las dependencias:
-
+2. **Ejecuta la aplicación:**
+   ```bash
+   docker-compose up
    ```
+
+3. **Accede a la API:**
+   - La aplicación estará disponible en `http://localhost:8500`
+
+### Usando Docker directamente
+
+1. **Construye la imagen:**
+   ```bash
+   docker build -t sentilo-aca .
+   ```
+
+2. **Ejecuta el contenedor:**
+   ```bash
+   docker run -p 8500:8500 sentilo-aca
+   ```
+
+### Ejecución local (sin Docker)
+
+1. **Instala las dependencias:**
+   ```bash
    pip install -r requirements.txt
    ```
 
-## Ejecución Local
+2. **Ejecuta la aplicación:**
+   ```bash
+   python src/embassaments.py
+   ```
 
-Para ejecutar la aplicación localmente, utiliza el siguiente comando:
+## 📡 API Endpoints
 
+### `GET /embassaments`
+Obtiene datos detallados de todos los embalses.
+
+**Respuesta:**
+```json
+[
+  {
+    "embassament": "Nombre del embalse",
+    "capacitat_maxima": "X.X hm³",
+    "volum_embassat_actual": 123.45,
+    "fecha_hora": "2025-01-XX"
+  }
+]
 ```
-python src/embassaments.py
+
+### `GET /global_percentage`
+Calcula el porcentaje global de llenado de todos los embalses.
+
+**Respuesta:**
+```json
+{
+  "global_percentage": 67.85,
+  "newest_date": "2025-01-XX"
+}
 ```
 
-La aplicación estará disponible en `http://127.0.0.1:5000`.
+## 🐳 Comandos Docker Útiles
 
-## Despliegue en Heroku
+```bash
+# Detener la aplicación
+docker-compose down
 
-Para desplegar la aplicación en Heroku, sigue estos pasos:
+# Reconstruir la imagen
+docker-compose build
 
-1. Asegúrate de tener la CLI de Heroku instalada y autenticada.
-2. Crea una nueva aplicación en Heroku:
+# Ver logs
+docker-compose logs
 
-   ```
-   heroku create nombre-de-tu-aplicacion
-   ```
-
-3. Despliega tu aplicación:
-
-   ```
-   git push heroku master
-   ```
-
-4. Abre la aplicación en el navegador:
-
-   ```
-   heroku open
-   ```
+# Ejecutar en segundo plano
+docker-compose up -d
+```
 
 ## Contribuciones
 
