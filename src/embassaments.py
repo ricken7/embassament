@@ -125,6 +125,6 @@ def global_percentage_route():
     return jsonify({"global_percentage": round(global_percentage, 2), "newest_date": newest_date})
 
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))
+    port = int(os.environ.get('PORT', 8500))
     print("Iniciando servidor...")
     app.run(debug=False, host='0.0.0.0', port=port)

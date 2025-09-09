@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "8500:8500"
+    environment:
+      - PORT=8500
+    restart: unless-stopped
